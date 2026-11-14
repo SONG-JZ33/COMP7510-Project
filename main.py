@@ -1,25 +1,23 @@
 import sys
+import os
+
+# 让 core / handlers 目录里的模块可以像课堂一样直接 import
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(BASE_DIR, 'core'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'handlers'))
+
 from PySide6.QtGui import QGuiApplication
+from PySide6.QtQuickControls2 import QQuickStyle
 from PySide6.QtQml import QQmlApplicationEngine
 
-print("Hello COMP7510 Project!")
-import os
-from dotenv import load_dotenv
-from supabase import create_client
+app = QGuiApplication()
+QQuickStyle.setStyle("Basic")
+engine = QQmlApplicationEngine()
+engine.load(os.path.join(BASE_DIR, 'qml', 'Window.qml'))
 
-load_dotenv() # 加载 .env
-url = os.environ.get("SUPABASE_URL")
-key = os.environ.get("SUPABASE_KEY")
+#### Handler 注册位置（页面写好后在这里实例化，和课堂一致）
+# browsePageHandler = BrowsePageHandler(engine)
+# itemDetailPageHandler = ItemDetailPageHandler(engine)
 
-if not url or not key:
-    print("❌ 找不到 URL 或 KEY，请检查 .env 文件")
-else:
-    supabase = create_client(url, key)
-    print("✅ Supabase 连接成功！")
-    
-    # 试着拉取一下分类表的数据
-    try:
-        response = supabase.table('categories').select("*").execute()
-        print("📦 成功读取分类数据：", response.data)
-    except Exception as e:
-        print("❌ 读取失败：", e)
+### app.exec() is always the last line
+app.exec()
