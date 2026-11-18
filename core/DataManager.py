@@ -17,6 +17,8 @@ class _DataManager:
     url = os.environ.get('SUPABASE_URL')      # 从 .env 读取
     api_key = os.environ.get('SUPABASE_KEY')
 
+    _current_user = None
+
     def __init__(self):
         self.supabase = create_client(self.url, self.api_key)
 
@@ -25,5 +27,27 @@ class _DataManager:
         # 使用系统本地时区
         return utc_time.astimezone().strftime('%Y-%m-%d %I:%M %p')
 
+    # 登录注册模块使用的类方法入口
+    @classmethod
+    def get_db(cls):
+        return dataManager.supabase
+
+    @classmethod
+    def set_current_user(cls, user_data):
+        cls._current_user = user_data
+        if user_data is None:
+            guest = SimpleNamespace()
+            guest.email = 'demo@demo.com'
+            guest.name = 'Demo Demo'
+            dataManager.user = guest
+        else:
+            dataManager.user = user_data
+        print('Current user:', getattr(user_data, 'email', None) or 'None')
+
+    @classmethod
+    def get_current_user(cls):
+        return cls._current_user
+
 
 dataManager = _DataManager()
+DataManager = _DataManager

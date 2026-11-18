@@ -196,6 +196,12 @@ Page {
         }
     }
 
+    // 详情页组件（供列表点击跳转使用）
+    Component {
+        id: itemDetailPageComponent
+        ItemDetailPage {}
+    }
+
     Component.onCompleted: {
         BrowsePageHandler.handleLoadCategories()
     }
