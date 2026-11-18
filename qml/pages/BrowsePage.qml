@@ -27,6 +27,34 @@ Page {
                 font.bold: true
             }
         }
+
+        // 搜索与收藏入口
+        Row {
+            anchors.right: parent.right
+            anchors.rightMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 14
+
+            Text {
+                text: "Search"
+                color: "white"
+                font.pixelSize: 12
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: stackView.push("SearchPage.qml")
+                }
+            }
+
+            Text {
+                text: "Favorites"
+                color: "white"
+                font.pixelSize: 12
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: stackView.push("FavoritesPage.qml")
+                }
+            }
+        }
     }
 
     ColumnLayout {

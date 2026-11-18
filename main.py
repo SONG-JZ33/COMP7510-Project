@@ -7,6 +7,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'handlers'))
 
 from BrowsePageHandler import BrowsePageHandler
 from ItemDetailPageHandler import ItemDetailPageHandler
+from SearchPageHandler import SearchPageHandler
+from FavoritesPageHandler import FavoritesPageHandler
 from AuthHandler import AuthHandler
 
 from PySide6.QtGui import QGuiApplication
@@ -23,6 +25,8 @@ engine.rootContext().setContextProperty("authHandler", authHandler)
 
 browsePageHandler = BrowsePageHandler(engine)
 itemDetailPageHandler = ItemDetailPageHandler(engine)
+searchPageHandler = SearchPageHandler(engine)
+favoritesPageHandler = FavoritesPageHandler(engine)
 
 engine.load(os.path.join(BASE_DIR, 'qml', 'Main.qml'))
 
