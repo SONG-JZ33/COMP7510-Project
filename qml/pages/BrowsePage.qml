@@ -42,8 +42,11 @@ Page {
             Layout.preferredHeight: 36
             clip: true
 
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
             Row {
-                spacing: 8
+                spacing: 6
 
                 Repeater {
                     model: categoryModel
@@ -53,7 +56,7 @@ Page {
                         required property string name
 
                         height: 34
-                        width: pillText.implicitWidth + 28
+                        width: pillText.implicitWidth + 22
                         radius: 17
                         color: id === selectedCategory ? '#27ae60' : 'white'
                         border.width: 1
