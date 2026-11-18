@@ -4,7 +4,8 @@ from datetime import datetime
 from types import SimpleNamespace
 from dotenv import load_dotenv
 
-load_dotenv()  # 从根目录 .env 读取 SUPABASE_URL 和 SUPABASE_KEY
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, '.env'))  # 从根目录 .env 读取 SUPABASE_URL 和 SUPABASE_KEY
 
 
 class _DataManager:
