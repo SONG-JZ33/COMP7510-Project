@@ -13,7 +13,7 @@ class _DataManager:
     user.name = 'Demo Demo'
 
     supabase: Client = None
-    url = os.environ.get('SUPABASE_URL')      # 从 .env 读取，不再硬编码
+    url = os.environ.get('SUPABASE_URL')      # 从 .env 读取
     api_key = os.environ.get('SUPABASE_KEY')
 
     def __init__(self):
@@ -21,7 +21,7 @@ class _DataManager:
 
     def toLocalTime(self, utc_time: str):
         utc_time = datetime.fromisoformat(utc_time)
-        # astimezone() 不传参数时使用系统本地时区，等同于课堂里 tzlocal.get_localzone()
+        # 使用系统本地时区
         return utc_time.astimezone().strftime('%Y-%m-%d %I:%M %p')
 
 
