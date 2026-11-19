@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, Slot
 
-from DataManager import dataManager
-from ProductListModel import ProductListModel
+from core.DataManager import dataManager
+from core.ProductListModel import ProductListModel
 
 
 class SearchPageHandler(QObject):

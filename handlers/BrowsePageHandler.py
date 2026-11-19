@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Slot
-from SimpleModel import SimpleModel
-from DataManager import dataManager
+from core.SimpleModel import SimpleModel
+from core.DataManager import dataManager
 
 PLACEHOLDER_IMAGE = 'placeholder.svg'
 

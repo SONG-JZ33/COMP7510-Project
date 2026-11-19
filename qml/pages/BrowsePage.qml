@@ -14,7 +14,7 @@ Page {
         id: brandHeader
         width: parent.width
         height: 44
-        color: '#27ae60'
+        color: '#dfe9fb'
 
         // 搜索与收藏入口
         Row {
@@ -28,12 +28,14 @@ Page {
                 height: 26
                 radius: 13
                 color: "white"
+                border.color: "#b9d0f5"
+                border.width: 1
 
                 Text {
                     id: searchLabel
                     anchors.centerIn: parent
                     text: "Search"
-                    color: "#27ae60"
+                    color: "#007bff"
                     font.pixelSize: 12
                 }
 
@@ -48,12 +50,14 @@ Page {
                 height: 26
                 radius: 13
                 color: "white"
+                border.color: "#b9d0f5"
+                border.width: 1
 
                 Text {
                     id: favoriteLabel
                     anchors.centerIn: parent
                     text: "Favorites"
-                    color: "#27ae60"
+                    color: "#007bff"
                     font.pixelSize: 12
                 }
 
@@ -94,9 +98,9 @@ Page {
                         height: 34
                         width: pillText.implicitWidth + 22
                         radius: 17
-                        color: id === selectedCategory ? '#27ae60' : 'white'
+                        color: id === selectedCategory ? '#dfe9fb' : 'white'
                         border.width: 1
-                        border.color: id === selectedCategory ? '#27ae60' : '#dcdedd'
+                        border.color: id === selectedCategory ? '#b9d0f5' : '#dcdedd'
 
                         Text {
                             id: pillText
@@ -104,7 +108,7 @@ Page {
                             text: name
                             font.pixelSize: 12
                             font.bold: id === selectedCategory
-                            color: id === selectedCategory ? 'white' : '#666666'
+                            color: id === selectedCategory ? '#007bff' : '#666666'
                         }
 
                         MouseArea {
