@@ -1,23 +1,37 @@
 import sys
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from handlers.AuthHandler import AuthHandler
+import os
 
-if __name__ == "__main__":
-    app = QGuiApplication(sys.argv)
-    
-    # Initialize backend logic Handler
-    auth_handler = AuthHandler()
-    
-    engine = QQmlApplicationEngine()
-    
-    # Register Python object to QML context so QML can call it
-    engine.rootContext().setContextProperty("authHandler", auth_handler)
-    
-    # Load main interface
-    engine.load("qml/Main.qml")
-    
-    if not engine.rootObjects():
-        sys.exit(-1)
-        
-    sys.exit(app.exec())
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, 'handlers'))
+
+from BrowsePageHandler import BrowsePageHandler
+from ItemDetailPageHandler import ItemDetailPageHandler
+from SearchPageHandler import SearchPageHandler
+from FavoritesPageHandler import FavoritesPageHandler
+from AuthHandler import AuthHandler
+
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQuickControls2 import QQuickStyle
+from PySide6.QtQml import QQmlApplicationEngine
+
+app = QGuiApplication(sys.argv)
+QQuickStyle.setStyle("Basic")
+engine = QQmlApplicationEngine()
+
+#### Handler 注册（必须在 engine.load 之前）
+authHandler = AuthHandler()
+engine.rootContext().setContextProperty("authHandler", authHandler)
+
+browsePageHandler = BrowsePageHandler(engine)
+itemDetailPageHandler = ItemDetailPageHandler(engine)
+searchPageHandler = SearchPageHandler(engine)
+favoritesPageHandler = FavoritesPageHandler(engine)
+
+engine.load(os.path.join(BASE_DIR, 'qml', 'Main.qml'))
+
+if not engine.rootObjects():
+    sys.exit(-1)
+
+### app.exec() is always the last line
+sys.exit(app.exec())

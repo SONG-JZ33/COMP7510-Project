@@ -5,7 +5,7 @@ ApplicationWindow {
     visible: true
     width: 400
     height: 700
-    title: "Campus Second-hand Trading"
+    title: "Campus Trading"
     color: "#f5f5f7"
 
     StackView {

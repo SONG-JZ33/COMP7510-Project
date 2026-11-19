@@ -151,20 +151,6 @@ Page {
     StackView {
         id: contentStack
         anchors.fill: parent
-        
-        // 默认显示一个内置的欢迎页，防止找不到文件报错
-        initialItem: Item {
-            ColumnLayout {
-                anchors.centerIn: parent
-                spacing: 10
-                Label {
-                    text: "🎉 login successfully！"
-                    font.pixelSize: 24
-                    font.bold: true
-                    Layout.alignment: Qt.AlignHCenter
-                }
-               
-            }
-        }
+        initialItem: "BrowsePage.qml"
     }
 }

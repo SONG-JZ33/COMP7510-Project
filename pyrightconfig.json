@@ -1,0 +1,10 @@
+{
+    "extraPaths": [
+        "core",
+        "handlers"
+    ],
+    "exclude": [
+        ".venv",
+        "**/__pycache__"
+    ]
+}
