@@ -250,6 +250,45 @@ Page {
         }
     }
 
+    // 发送失败时在底部弹出的提示
+    Rectangle {
+        id: hintBubble
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 68
+        width: hintLabel.implicitWidth + 24
+        height: hintLabel.implicitHeight + 14
+        radius: 6
+        color: '#cc2c3e50'
+        visible: hintTimer.running
+        z: 10
+
+        Text {
+            id: hintLabel
+            anchors.centerIn: parent
+            text: ''
+            color: 'white'
+            font.pixelSize: 12
+        }
+    }
+
+    Timer {
+        id: hintTimer
+        interval: 2500
+        repeat: false
+    }
+
+    function showHint(result) {
+        if (result === 'empty') {
+            hintLabel.text = 'Please write a comment'
+        } else if (result === 'not_signed_in') {
+            hintLabel.text = 'Please sign in to comment'
+        } else {
+            hintLabel.text = 'Failed to post, please try again'
+        }
+        hintTimer.restart()
+    }
+
     footer: ToolBar {
         background: Rectangle { color: 'white' }
 
@@ -285,10 +324,12 @@ Page {
                     source: "../send.svg"
                 }
                 onClicked: {
-                    var success = ItemDetailPageHandler.handleSendComment(
+                    var result = ItemDetailPageHandler.handleSendComment(
                         productId, commentField.text)
-                    if (success) {
+                    if (result === 'ok') {
                         commentField.text = ''
+                    } else {
+                        showHint(result)
                     }
                 }
             }

@@ -106,17 +106,16 @@ class ItemDetailPageHandler(QObject):
             return ''
         return self.data['description'] or 'No description'
 
-    @Slot(str, str, result=bool)
+    @Slot(str, str, result=str)
     def handleSendComment(self, product_id, content):
         content = content.strip()
         if len(content) == 0:
-            return False
+            return 'empty'
 
         # 留言必须登录，取当前登录用户的 email
         session = dataManager.supabase.auth.get_session()
         if session is None or session.user is None:
-            print('Please sign in before posting a comment')
-            return False
+            return 'not_signed_in'
 
         data = dict(
             product_id=product_id,
@@ -128,7 +127,7 @@ class ItemDetailPageHandler(QObject):
         try:
             dataManager.supabase.table('comments').insert(data).execute()
             self.handleLoadComments(product_id)
-            return True
+            return 'ok'
         except Exception as e:
             print(e)
-            return False
+            return 'error'
