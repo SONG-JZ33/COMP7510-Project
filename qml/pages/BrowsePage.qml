@@ -33,22 +33,42 @@ Page {
             anchors.right: parent.right
             anchors.rightMargin: 12
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 14
+            spacing: 8
 
-            Text {
-                text: "Search"
+            Rectangle {
+                width: searchLabel.implicitWidth + 18
+                height: 26
+                radius: 13
                 color: "white"
-                font.pixelSize: 12
+
+                Text {
+                    id: searchLabel
+                    anchors.centerIn: parent
+                    text: "Search"
+                    color: "#27ae60"
+                    font.pixelSize: 12
+                }
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: stackView.push("SearchPage.qml")
                 }
             }
 
-            Text {
-                text: "Favorites"
+            Rectangle {
+                width: favoriteLabel.implicitWidth + 18
+                height: 26
+                radius: 13
                 color: "white"
-                font.pixelSize: 12
+
+                Text {
+                    id: favoriteLabel
+                    anchors.centerIn: parent
+                    text: "Favorites"
+                    color: "#27ae60"
+                    font.pixelSize: 12
+                }
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: stackView.push("FavoritesPage.qml")
