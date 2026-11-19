@@ -30,8 +30,7 @@ class BrowsePageHandler(QObject):
     @Slot(int)
     def handleLoadData(self, category_id):
         query = dataManager.supabase.table('products') \
-            .select('id, seller_email, title, price, condition, image_url, created_at, '
-                    'categories!inner(name)')
+            .select('id, seller_email, title, price, image_url, created_at')
 
         # category_id 为 0（All）时不加筛选，否则只查该分类
         if category_id != 0:
@@ -53,10 +52,13 @@ class BrowsePageHandler(QObject):
             seller = nickname_map.get(product['seller_email'], product['seller_email'])
             local_time = dataManager.toLocalTime(product['created_at']) \
                 if product['created_at'] else ''
+            price = float(product['price'])
+            # 整数价格不带小数位，48.0 显示为 $48 而不是 $48.0
+            price_text = f"${int(price)}" if price == int(price) else f"${price:.2f}"
             data.append(dict(
                 id=product['id'],
                 title=product['title'],
-                price_text=f"${product['price']}",
+                price_text=price_text,
                 content=f"{seller}  {local_time}",
                 image_url=product['image_url'] if product['image_url'] else PLACEHOLDER_IMAGE
             ))

@@ -17,8 +17,12 @@ class ItemDetailPageHandler(QObject):
     def handleLoadData(self, product_id):
         response = dataManager.supabase.table('products').select(
             'id, seller_email, title, price, condition, description, '
-            'created_at, categories!inner(name)'
+            'image_url, created_at, categories!inner(name)'
         ).eq('id', product_id).execute()
+
+        # 商品不存在时不清空旧数据，直接返回
+        if len(response.data) == 0:
+            return
 
         self.data = response.data[0]
 
@@ -63,30 +67,43 @@ class ItemDetailPageHandler(QObject):
 
     @Slot(result=str)
     def getTitle(self):
-        return self.data['title']
+        return self.data['title'] if self.data else ''
 
     @Slot(result=str)
     def getImageUrl(self):
+        if not self.data:
+            return 'placeholder.svg'
         return self.data['image_url'] if self.data['image_url'] else 'placeholder.svg'
 
     @Slot(result=str)
     def getPrice(self):
-        return f"${self.data['price']}"
+        if not self.data:
+            return ''
+        price = float(self.data['price'])
+        # 整数价格不带小数位，48.0 显示为 $48 而不是 $48.0
+        return f"${int(price)}" if price == int(price) else f"${price:.2f}"
 
     @Slot(result=str)
     def getCondition(self):
+        if not self.data:
+            return '-'
         return self.data['condition'] or '-'
 
     @Slot(result=str)
     def getCategory(self):
-        return self.data['categories']['name']
+        if not self.data:
+            return '-'
+        category = self.data.get('categories')
+        return category['name'] if category else '-'
 
     @Slot(result=str)
     def getSeller(self):
-        return self.data['seller_name']
+        return self.data['seller_name'] if self.data else ''
 
     @Slot(result=str)
     def getDescription(self):
+        if not self.data:
+            return ''
         return self.data['description'] or 'No description'
 
     @Slot(str, str, result=bool)
