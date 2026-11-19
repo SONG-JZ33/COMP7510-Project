@@ -14,4 +14,10 @@ ApplicationWindow {
         // Set initial page to Sign In page
         initialItem: "pages/SignInPage.qml" 
     }
+    Connections {
+    target: authHandler
+    function onLogoutSuccess() {
+        stackView.replace("pages/SignInPage.qml") // 强制退回登录页
+    }
+}
 }

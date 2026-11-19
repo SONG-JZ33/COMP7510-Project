@@ -3,8 +3,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Page {
-    background: Rectangle { color: "#f5f5f7" }
-
+    background: Rectangle {
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#e0eafc" }
+            GradientStop { position: 1.0; color: "#cfdef3" }
+        }
+    }
     // 顶部返回按钮
     header: ToolBar {
         background: Rectangle { color: "#ffffff" }
@@ -32,21 +36,64 @@ Page {
         width: parent.width * 0.8
         spacing: 20
 
+       // 邮箱输入框
         TextField {
             id: emailInput
-            placeholderText: "Enter email"
+            placeholderText: "Email address"
             Layout.fillWidth: true
             font.pixelSize: 16
-            padding: 12
+            leftPadding: 45 // 给左边的图标留位置
+            padding: 15
+            
+            // 输入框左边的图标
+            Text {
+                text: "✉️"
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 18
+                opacity: 0.6
+            }
+
+            // 自定义背景：圆角 + 动态边框颜色
+            background: Rectangle {
+                color: "#ffffff"
+                radius: 12
+                border.color: emailInput.activeFocus ? "#007bff" : "transparent"
+                border.width: 2
+                // 简单的阴影效果
+                layer.enabled: true
+            }
+        
         }
 
+        // 密码输入框
         TextField {
             id: passwordInput
-            placeholderText: "Enter password (min 6 chars)"
+            placeholderText: "Password"
             echoMode: TextInput.Password
             Layout.fillWidth: true
             font.pixelSize: 16
-            padding: 12
+            leftPadding: 45
+            padding: 15
+
+            Text {
+                text: "🔒"
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 18
+                opacity: 0.6
+            }
+
+            background: Rectangle {
+                color: "#ffffff"
+                radius: 12
+                border.color: passwordInput.activeFocus ? "#007bff" : "transparent"
+                border.width: 2
+            }
+            onTextChanged: errorText.text = ""
+      
         }
 
         Button {
@@ -55,9 +102,11 @@ Page {
             Layout.fillWidth: true
             Layout.preferredHeight: 50
             font.pixelSize: 18
-            background: Rectangle {
-                color: signUpBtn.down ? "#1e7e34" : "#28a745"
-                radius: 8
+           background: Rectangle {
+                // 蓝色系：正常 #007bff，按下 #0056b3，禁用 #a0c4ff
+                color: signUpBtn.enabled ? (signUpBtn.down ? "#0056b3" : "#007bff") : "#a0c4ff"
+                radius: 12 
+                Behavior on color { ColorAnimation { duration: 150 } }
             }
             contentItem: Text {
                 text: signUpBtn.text
