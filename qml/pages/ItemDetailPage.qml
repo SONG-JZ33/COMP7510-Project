@@ -118,6 +118,23 @@ Page {
                             }
                         }
                     }
+
+                    // 收藏按钮
+                    Button {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 34
+                        text: "Add to Favorites"
+                        font.pixelSize: 12
+                        onClicked: {
+                            if (!ItemDetailPageHandler.isSignedIn()) {
+                                showHint('not_signed_in')
+                                return
+                            }
+                            showHint(FavoritesPageHandler.handleAddFavorite(productId)
+                                     ? 'favorite_added'
+                                     : 'favorite_failed')
+                        }
+                    }
                 }
             }
 
@@ -282,7 +299,11 @@ Page {
         if (result === 'empty') {
             hintLabel.text = 'Please write a comment'
         } else if (result === 'not_signed_in') {
-            hintLabel.text = 'Please sign in to comment'
+            hintLabel.text = 'Please sign in first'
+        } else if (result === 'favorite_added') {
+            hintLabel.text = 'Added to favorites'
+        } else if (result === 'favorite_failed') {
+            hintLabel.text = 'Could not add to favorites'
         } else {
             hintLabel.text = 'Failed to post, please try again'
         }

@@ -106,6 +106,11 @@ class ItemDetailPageHandler(QObject):
             return ''
         return self.data['description'] or 'No description'
 
+    @Slot(result=bool)
+    def isSignedIn(self):
+        session = dataManager.supabase.auth.get_session()
+        return session is not None and session.user is not None
+
     @Slot(str, str, result=str)
     def handleSendComment(self, product_id, content):
         content = content.strip()
