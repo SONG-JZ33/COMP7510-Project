@@ -8,7 +8,7 @@ if not exist ".venv\Scripts\python.exe" (
     exit /b 1
 )
 
-echo Starting Campus Second-hand Market ...
+echo Starting Campus Trading ...
 ".venv\Scripts\python.exe" main.py
 
 if errorlevel 1 (

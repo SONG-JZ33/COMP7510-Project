@@ -21,7 +21,7 @@ Page {
             anchors.left: parent.left
             anchors.leftMargin: 16
             Text {
-                text: "Campus Market"
+                text: "Campus Trading"
                 color: "white"
                 font.pixelSize: 14
                 font.bold: true

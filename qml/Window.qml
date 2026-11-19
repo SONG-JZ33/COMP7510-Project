@@ -6,7 +6,7 @@ ApplicationWindow {
     width: 360
     height: 640
     visible: true
-    title: "Campus Second-hand Market"
+    title: "Campus Trading"
 
     StackView {
         id: stackView
