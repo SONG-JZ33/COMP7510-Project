@@ -7,7 +7,7 @@ class AuthHandler(QObject):
     loginFailed = Signal(str) # Pass error message to QML
     signUpSuccess = Signal(str)
     signUpFailed = Signal(str)
-
+    logoutSuccess = Signal()
     @Slot(str, str)
     def handleLogin(self, email, password):
         if not email or not password:
@@ -37,7 +37,7 @@ class AuthHandler(QObject):
         db.auth.sign_out()
         DataManager.set_current_user(None)
         print("🚪 User logged out")
-   
+        self.logoutSuccess.emit()
     @Slot(str, str)
     def handleSignUp(self, email, password):
         if not email or not password:

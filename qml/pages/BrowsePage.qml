@@ -13,20 +13,8 @@ Page {
     Rectangle {
         id: brandHeader
         width: parent.width
-        height: 54
+        height: 44
         color: '#27ae60'
-
-        Column {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 16
-            Text {
-                text: "Campus Trading"
-                color: "white"
-                font.pixelSize: 14
-                font.bold: true
-            }
-        }
 
         // 搜索与收藏入口
         Row {
