@@ -9,6 +9,8 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))  # 从根目录 .env 读取 SUPABASE
 
 
 class _DataManager:
+    _instance = None
+
     user = SimpleNamespace()
     user.email = 'demo@demo.com'
     user.name = 'Demo Demo'
@@ -19,7 +21,16 @@ class _DataManager:
 
     _current_user = None
 
+    def __new__(cls, *args, **kwargs):
+        # 保证无论 DataManager() 还是 dataManager 都拿到同一个实例
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
+        # 已初始化过就不再重建客户端
+        if self.supabase is not None:
+            return
         self.supabase = create_client(self.url, self.api_key)
 
     def toLocalTime(self, utc_time: str):

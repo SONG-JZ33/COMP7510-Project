@@ -2,6 +2,7 @@ import sys
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'core'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'handlers'))
 
@@ -30,5 +31,8 @@ favoritesPageHandler = FavoritesPageHandler(engine)
 
 engine.load(os.path.join(BASE_DIR, 'qml', 'Main.qml'))
 
+if not engine.rootObjects():
+    sys.exit(-1)
+
 ### app.exec() is always the last line
-app.exec()
+sys.exit(app.exec())
