@@ -130,6 +130,7 @@ Page {
             Layout.fillHeight: true
             spacing: 12
             clip: true
+            bottomMargin: 68
 
             model: listModel
 
@@ -233,6 +234,45 @@ Page {
                     }
                 }
             }
+        }
+    }
+
+    // 发布商品入口（悬浮按钮）
+    Rectangle {
+        width: 52
+        height: 52
+        radius: 26
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 18
+        anchors.bottomMargin: 14
+        color: "#1a000000"
+    }
+
+    Rectangle {
+        id: publishButton
+        width: 52
+        height: 52
+        radius: 26
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 18
+        anchors.bottomMargin: 18
+        color: "#007bff"
+        border.color: "#ffffff"
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "+"
+            color: "white"
+            font.pixelSize: 30
+            font.bold: true
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: stackView.push("PublishPage.qml")
         }
     }
 
