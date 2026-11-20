@@ -4,13 +4,13 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'handlers'))
-
+from handlers.ProfileHandler import ProfileHandler
 from BrowsePageHandler import BrowsePageHandler
 from ItemDetailPageHandler import ItemDetailPageHandler
 from SearchPageHandler import SearchPageHandler
 from FavoritesPageHandler import FavoritesPageHandler
 from AuthHandler import AuthHandler
-
+from handlers.MyListingsHandler import MyListingsHandler
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQuickControls2 import QQuickStyle
 from PySide6.QtQml import QQmlApplicationEngine
@@ -27,7 +27,10 @@ browsePageHandler = BrowsePageHandler(engine)
 itemDetailPageHandler = ItemDetailPageHandler(engine)
 searchPageHandler = SearchPageHandler(engine)
 favoritesPageHandler = FavoritesPageHandler(engine)
-
+profile_handler = ProfileHandler()
+engine.rootContext().setContextProperty("profileHandler", profile_handler)
+listings_handler = MyListingsHandler()
+engine.rootContext().setContextProperty("listingsHandler", listings_handler)
 engine.load(os.path.join(BASE_DIR, 'qml', 'Main.qml'))
 
 if not engine.rootObjects():
