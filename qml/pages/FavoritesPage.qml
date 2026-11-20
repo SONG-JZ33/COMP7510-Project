@@ -8,10 +8,12 @@ Page {
     header: ToolBar {
         RowLayout {
             anchors.fill: parent
-
             ToolButton {
-                text: "Back"
-                onClicked: stackView.pop()
+                icon.source: "back.svg"
+                onClicked: {
+                    stackView.pop()
+                    ListPageHandler.handleLoadData()
+                }
             }
 
             Text {
@@ -68,6 +70,7 @@ Page {
                 required property var price
                 required property string condition
                 required property string seller_email
+                required property string image_url
 
                 width: favoriteList.width
                 height: 126
@@ -75,48 +78,71 @@ Page {
                 color: "white"
                 border.color: "#dddddd"
 
-                ColumnLayout {
+                RowLayout {
                     anchors.fill: parent
                     anchors.margins: 10
-                    spacing: 4
+                    spacing: 10
 
-                    Text {
-                        Layout.fillWidth: true
-                        text: title
-                        font.bold: true
-                        font.pixelSize: 15
-                        elide: Text.ElideRight
+                    Rectangle {
+                        Layout.preferredWidth: 96
+                        Layout.preferredHeight: 96
+                        radius: 8
+                        clip: true
+                        color: "#f0f0f0"
+
+                        Image {
+                            anchors.fill: parent
+                            source: image_url
+                            fillMode: Image.PreserveAspectCrop
+                            asynchronous: true
+                        }
                     }
 
-                    Text {
+                    ColumnLayout {
                         Layout.fillWidth: true
-                        text: price === null || price === undefined
-                              ? "Price: Not provided"
-                              : "Price: " + price
-                        color: "#333333"
-                    }
+                        Layout.fillHeight: true
+                        spacing: 4
 
-                    Text {
-                        Layout.fillWidth: true
-                        text: condition === "" ? "Condition: Not provided" : "Condition: " + condition
-                        color: "#777777"
-                        elide: Text.ElideRight
-                    }
+                        Text {
+                            Layout.fillWidth: true
+                            text: title
+                            font.bold: true
+                            font.pixelSize: 15
+                            elide: Text.ElideRight
+                            maximumLineCount: 1
+                        }
 
-                    Text {
-                        Layout.fillWidth: true
-                        text: "Seller: " + seller_email
-                        color: "#777777"
-                        elide: Text.ElideRight
-                    }
+                        Text {
+                            Layout.fillWidth: true
+                            text: price === null || price === undefined
+                                  ? "Price: Not provided"
+                                  : "Price: " + price
+                            color: "#333333"
+                        }
 
-                    Button {
-                        text: "Remove from Favorites"
-                        onClicked: {
-                            var success = FavoritesPageHandler.handleRemoveFavorite(product_id)
-                            statusText.text = success
-                                    ? "Favorite removed."
-                                    : "Could not remove favorite."
+                        Text {
+                            Layout.fillWidth: true
+                            text: condition === "" ? "Condition: Not provided" : "Condition: " + condition
+                            color: "#777777"
+                            elide: Text.ElideRight
+                        }
+
+                        Text {
+                            Layout.fillWidth: true
+                            text: "Seller: " + seller_email
+                            color: "#777777"
+                            elide: Text.ElideRight
+                        }
+
+                        Button {
+                            Layout.alignment: Qt.AlignLeft
+                            text: "Remove from Favorites"
+                            onClicked: {
+                                var success = FavoritesPageHandler.handleRemoveFavorite(product_id)
+                                statusText.text = success
+                                        ? "Favorite removed."
+                                        : "Could not remove favorite."
+                            }
                         }
                     }
                 }

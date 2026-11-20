@@ -26,8 +26,11 @@ Page {
             spacing: 4
 
             ToolButton {
-                text: "Back"
-                onClicked: stackView.pop()
+                icon.source: "back.svg"
+                onClicked: {
+                    stackView.pop()
+                    ListPageHandler.handleLoadData()
+                }
             }
 
             TextField {
@@ -71,24 +74,55 @@ Page {
                 required property var price
                 required property string condition
                 required property string seller_email
+                required property string image_url
 
                 width: resultList.width
-                height: 126
+                height: 136
                 radius: 8
                 color: "white"
                 border.color: "#dddddd"
 
+                // Use the same image layout and crop mode as BrowsePage.qml.
+                Rectangle {
+                    id: imageWrap
+                    width: 108
+                    height: 108
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    radius: 8
+                    clip: true
+                    color: "#f0f0f0"
+
+                    Image {
+                        anchors.fill: parent
+                        source: image_url
+                        fillMode: Image.PreserveAspectCrop
+                        asynchronous: true
+                    }
+                }
+
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 4
+                    anchors {
+                        left: imageWrap.right
+                        top: parent.top
+                        right: parent.right
+                        bottom: parent.bottom
+                        leftMargin: 12
+                        topMargin: 9
+                        rightMargin: 10
+                        bottomMargin: 9
+                    }
+                    spacing: 3
 
                     Text {
                         Layout.fillWidth: true
                         text: title
                         font.bold: true
                         font.pixelSize: 15
+                        color: "#2c3e50"
                         elide: Text.ElideRight
+                        maximumLineCount: 1
                     }
 
                     Text {
@@ -97,6 +131,7 @@ Page {
                               ? "Price: Not provided"
                               : "Price: " + price
                         color: "#333333"
+                        elide: Text.ElideRight
                     }
 
                     Text {
@@ -115,6 +150,7 @@ Page {
 
                     Button {
                         text: "Add to Favorites"
+                        Layout.alignment: Qt.AlignLeft
                         onClicked: {
                             var success = FavoritesPageHandler.handleAddFavorite(product_id)
                             statusText.text = success

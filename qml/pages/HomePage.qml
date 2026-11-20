@@ -13,6 +13,7 @@ Page {
             anchors.fill: parent
             ToolButton {
                 text: "☰" 
+                enabled: !m3PostHandler.publishing
                 font.pixelSize: 22
                 onClicked: drawer.open() // 点击打开左侧抽屉
             }
@@ -57,6 +58,7 @@ Page {
                 // 浏览商品
                 Button {
                     text: "Browse Items"
+                    enabled: !m3PostHandler.publishing
                     flat: true
                     Layout.fillWidth: true
                     Layout.preferredHeight: 45 // 固定高度，防止被拉伸
@@ -76,6 +78,7 @@ Page {
                 // 个人资料
                 Button {
                     text: "My Profile"
+                    enabled: !m3PostHandler.publishing
                     flat: true
                     Layout.fillWidth: true
                     Layout.preferredHeight: 45
@@ -95,6 +98,7 @@ Page {
                 // 我的发布
                 Button {
                     text: "My Listings"
+                    enabled: !m3PostHandler.publishing
                     flat: true
                     Layout.fillWidth: true
                     Layout.preferredHeight: 45
@@ -117,6 +121,7 @@ Page {
            // 退出登录按钮 (带边框设计)
             Button {
                 text: "Sign Out"
+                enabled: !m3PostHandler.publishing
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 Layout.bottomMargin: 20 // 距离底部留一点空隙
@@ -150,7 +155,31 @@ Page {
     // ================= 内部页面容器 =================
     StackView {
         id: contentStack
+        objectName: "homeContentStack"
         anchors.fill: parent
         initialItem: "BrowsePage.qml"
+    }
+
+    Popup {
+        id: publishFeedback
+        objectName: "publishSuccess"
+        anchors.centerIn: parent
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        Label { text: "Product published successfully." }
+        Timer { interval: 3000; running: publishFeedback.opened; onTriggered: publishFeedback.close() }
+    }
+
+    Connections {
+        target: m3PostHandler
+        function onPublished() {
+            if (contentStack.currentItem && contentStack.currentItem.objectName === "postItemPage") {
+                // 弹栈前切换到全部分类，浏览页恢复活动时会自动刷新一次。
+                var previousPage = contentStack.get(contentStack.depth - 2)
+                if (previousPage && previousPage.objectName === "browsePage")
+                    previousPage.selectedCategory = 0
+                contentStack.pop()
+                publishFeedback.open()
+            }
+        }
     }
 }

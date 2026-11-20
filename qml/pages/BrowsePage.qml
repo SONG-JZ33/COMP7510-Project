@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Page {
+    objectName: "browsePage"
     property int selectedCategory: 0
 
     background: Rectangle {
@@ -130,6 +131,7 @@ Page {
             Layout.fillHeight: true
             spacing: 12
             clip: true
+            bottomMargin: 68
 
             model: listModel
 
@@ -233,6 +235,47 @@ Page {
                     }
                 }
             }
+        }
+    }
+
+    // 发布商品入口（悬浮按钮）
+    Rectangle {
+        width: 52
+        height: 52
+        radius: 26
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 18
+        anchors.bottomMargin: 14
+        color: "#1a000000"
+    }
+
+    Rectangle {
+        id: publishButton
+        width: 52
+        height: 52
+        radius: 26
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 18
+        anchors.bottomMargin: 18
+        color: "#007bff"
+        border.color: "#ffffff"
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "+"
+            color: "white"
+            font.pixelSize: 30
+            font.bold: true
+        }
+
+        MouseArea {
+            objectName: "postEntry"
+            anchors.fill: parent
+            // 从原有发布入口进入 M3 表单，返回时仍使用这个导航栈。
+            onClicked: contentStack.push("PublishPage.qml")
         }
     }
 

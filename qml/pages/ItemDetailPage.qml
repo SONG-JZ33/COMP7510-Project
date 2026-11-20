@@ -225,7 +225,7 @@ Page {
                             width: 38
                             height: 38
                             radius: 19
-                            color: '#27ae60'
+                            color: '#007bff'
                             Layout.alignment: Qt.AlignTop
                             Text {
                                 anchors.centerIn: parent
