@@ -10,6 +10,9 @@ from ItemDetailPageHandler import ItemDetailPageHandler
 from SearchPageHandler import SearchPageHandler
 from FavoritesPageHandler import FavoritesPageHandler
 from AuthHandler import AuthHandler
+from handlers.PostItemPageHandler import PostItemPageHandler
+from database.post_repository import SupabasePostRepository
+from core.DataManager import dataManager
 
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQuickControls2 import QQuickStyle
@@ -27,6 +30,8 @@ browsePageHandler = BrowsePageHandler(engine)
 itemDetailPageHandler = ItemDetailPageHandler(engine)
 searchPageHandler = SearchPageHandler(engine)
 favoritesPageHandler = FavoritesPageHandler(engine)
+postItemPageHandler = PostItemPageHandler(SupabasePostRepository(dataManager))
+engine.rootContext().setContextProperty("m3PostHandler", postItemPageHandler)
 
 engine.load(os.path.join(BASE_DIR, 'qml', 'Main.qml'))
 
