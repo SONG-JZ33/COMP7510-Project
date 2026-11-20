@@ -15,43 +15,52 @@ class ItemDetailPageHandler(QObject):
 
     @Slot(str)
     def handleLoadData(self, product_id):
-        response = dataManager.supabase.table('products').select(
-            'id, seller_email, title, price, condition, description, '
-            'image_url, created_at, categories!inner(name)'
-        ).eq('id', product_id).execute()
+        try:
+            response = dataManager.supabase.table('products').select(
+                'id, seller_email, title, price, condition, description, '
+                'image_url, created_at, categories!inner(name)'
+            ).eq('id', product_id).execute()
 
-        # 商品不存在时不清空旧数据，直接返回
-        if len(response.data) == 0:
+            # 商品不存在时不清空旧数据，直接返回
+            if len(response.data) == 0:
+                return
+
+            self.data = response.data[0]
+
+            # seller_email 无外键，手动查卖家 nickname
+            user_response = dataManager.supabase.table('users') \
+                .select('email, nickname') \
+                .eq('email', self.data['seller_email']).execute()
+            if len(user_response.data) > 0:
+                self.data['seller_name'] = user_response.data[0]['nickname']
+            else:
+                self.data['seller_name'] = self.data['seller_email']
+        except Exception as error:
+            # 网络异常时保留旧详情，不打断界面
+            print('handleLoadData failed:', error)
             return
-
-        self.data = response.data[0]
-
-        # seller_email 无外键，手动查卖家 nickname
-        user_response = dataManager.supabase.table('users') \
-            .select('email, nickname') \
-            .eq('email', self.data['seller_email']).execute()
-        if len(user_response.data) > 0:
-            self.data['seller_name'] = user_response.data[0]['nickname']
-        else:
-            self.data['seller_name'] = self.data['seller_email']
 
         self.handleLoadComments(product_id)
 
     @Slot(str)
     def handleLoadComments(self, product_id):
-        response = dataManager.supabase.table('comments') \
-            .select('id, user_email, content, created_at') \
-            .eq('product_id', product_id) \
-            .order('created_at').execute()
-        comments = response.data
+        try:
+            response = dataManager.supabase.table('comments') \
+                .select('id, user_email, content, created_at') \
+                .eq('product_id', product_id) \
+                .order('created_at').execute()
+            comments = response.data
 
-        # user_email 无外键，手动查留言人 nickname
-        emails = [c['user_email'] for c in comments]
-        nickname_map = {}
-        if len(emails) > 0:
-            user_response = dataManager.supabase.table('users') \
-                .select('email, nickname').in_('email', emails).execute()
-            nickname_map = {u['email']: u['nickname'] for u in user_response.data}
+            # user_email 无外键，手动查留言人 nickname
+            emails = [c['user_email'] for c in comments]
+            nickname_map = {}
+            if len(emails) > 0:
+                user_response = dataManager.supabase.table('users') \
+                    .select('email, nickname').in_('email', emails).execute()
+                nickname_map = {u['email']: u['nickname'] for u in user_response.data}
+        except Exception as error:
+            print('handleLoadComments failed:', error)
+            return
 
         data = []
         for comment in comments:
