@@ -4,8 +4,11 @@ from core.DataManager import dataManager
 from core.ProductListModel import ProductListModel
 
 
+PLACEHOLDER_IMAGE = "placeholder.svg"
+
+
 class SearchPageHandler(QObject):
-    """Search products by title using the actual public.products schema."""
+    """Search products by title and expose their image URLs to the QML page."""
 
     def __init__(self, engine):
         super().__init__()
@@ -22,11 +25,10 @@ class SearchPageHandler(QObject):
             return False
 
         try:
-            # Confirmed columns from the team's screenshot:
-            # products.id (uuid), seller_email, title, price, condition.
+            # image_url is the same products-table field used by BrowsePageHandler.
             response = (
                 dataManager.supabase.table("products")
-                .select("id, title, price, condition, seller_email")
+                .select("id, title, price, condition, seller_email, image_url")
                 .ilike("title", f"%{keyword}%")
                 .execute()
             )
@@ -34,12 +36,12 @@ class SearchPageHandler(QObject):
             items = []
             for product in response.data or []:
                 items.append({
-                    # Expose the UUID as a string role named product_id in QML.
                     "product_id": str(product.get("id") or ""),
                     "title": product.get("title") or "Untitled product",
                     "price": product.get("price"),
                     "condition": product.get("condition") or "",
                     "seller_email": product.get("seller_email") or "",
+                    "image_url": product.get("image_url") or PLACEHOLDER_IMAGE,
                 })
 
             self.searchModel.setItems(items)

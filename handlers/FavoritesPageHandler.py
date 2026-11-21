@@ -9,6 +9,7 @@ class FavoritesPageHandler(QObject):
 
     USER_COLUMN = "user_email"
     PRODUCT_COLUMN = "product_id"
+    PLACEHOLDER_IMAGE = "placeholder.svg"
 
     def __init__(self, engine):
         super().__init__()
@@ -36,12 +37,11 @@ class FavoritesPageHandler(QObject):
             return False
 
         try:
-            # favorites.product_id is a UUID foreign key to products.id.
-            # PostgREST resolves the products relationship through that FK.
+            # Include products.image_url so the favorites page can display thumbnails.
             response = (
                 dataManager.supabase.table("favorites")
                 .select(
-                    "product_id, products!inner(id, title, price, condition, seller_email)"
+                    "product_id, products!inner(id, title, price, condition, seller_email, image_url)"
                 )
                 .eq(self.USER_COLUMN, email)
                 .execute()
@@ -66,6 +66,7 @@ class FavoritesPageHandler(QObject):
                     "price": product.get("price"),
                     "condition": product.get("condition") or "",
                     "seller_email": product.get("seller_email") or "",
+                    "image_url": product.get("image_url") or self.PLACEHOLDER_IMAGE,
                 })
 
             self.favoritesModel.setItems(items)
