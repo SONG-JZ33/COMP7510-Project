@@ -11,6 +11,10 @@ from SearchPageHandler import SearchPageHandler
 from FavoritesPageHandler import FavoritesPageHandler
 from AuthHandler import AuthHandler
 from handlers.MyListingsHandler import MyListingsHandler
+from handlers.PostItemPageHandler import PostItemPageHandler
+from database.post_repository import SupabasePostRepository
+from core.DataManager import dataManager
+
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQuickControls2 import QQuickStyle
 from PySide6.QtQml import QQmlApplicationEngine
@@ -31,6 +35,9 @@ profile_handler = ProfileHandler()
 engine.rootContext().setContextProperty("profileHandler", profile_handler)
 listings_handler = MyListingsHandler()
 engine.rootContext().setContextProperty("listingsHandler", listings_handler)
+postItemPageHandler = PostItemPageHandler(SupabasePostRepository(dataManager))
+engine.rootContext().setContextProperty("m3PostHandler", postItemPageHandler)
+
 engine.load(os.path.join(BASE_DIR, 'qml', 'Main.qml'))
 
 if not engine.rootObjects():

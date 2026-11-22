@@ -7,6 +7,10 @@ ApplicationWindow {
     height: 700
     title: "Campus Trading"
     color: "#f5f5f7"
+    onClosing: function(close) {
+        if (m3PostHandler.publishing)
+            close.accepted = false
+    }
 
     StackView {
         id: stackView

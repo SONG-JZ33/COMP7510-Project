@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Page {
+    objectName: "browsePage"
     property int selectedCategory: 0
 
     background: Rectangle {
@@ -271,8 +272,10 @@ Page {
         }
 
         MouseArea {
+            objectName: "postEntry"
             anchors.fill: parent
-            onClicked: stackView.push("PublishPage.qml")
+            // 从原有发布入口进入 M3 表单，返回时仍使用这个导航栈。
+            onClicked: contentStack.push("PublishPage.qml")
         }
     }
 
