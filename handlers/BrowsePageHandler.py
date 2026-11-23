@@ -36,7 +36,8 @@ class BrowsePageHandler(QObject):
     def handleLoadData(self, category_id):
         try:
             query = dataManager.supabase.table('products') \
-                .select('id, seller_email, title, price, image_url, created_at')
+                .select('id, seller_email, title, price, image_url, created_at') \
+                .eq('status', 'available')
 
             # category_id 为 0（All）时不加筛选，否则只查该分类
             if category_id != 0:
