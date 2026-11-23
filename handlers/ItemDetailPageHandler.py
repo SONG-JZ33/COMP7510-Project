@@ -18,7 +18,7 @@ class ItemDetailPageHandler(QObject):
         try:
             response = dataManager.supabase.table('products').select(
                 'id, seller_email, title, price, condition, description, '
-                'image_url, created_at, categories!inner(name)'
+                'image_url, created_at, status, categories!inner(name)'
             ).eq('id', product_id).execute()
 
             # 商品不存在时不清空旧数据，直接返回
@@ -114,6 +114,11 @@ class ItemDetailPageHandler(QObject):
         if not self.data:
             return ''
         return self.data['description'] or 'No description'
+
+    @Slot(result=bool)
+    def isSold(self):
+        # 已售商品在详情页显示 Sold 状态，并禁用收藏按钮
+        return bool(self.data) and self.data.get('status') == 'sold'
 
     @Slot(result=bool)
     def isSignedIn(self):

@@ -119,11 +119,33 @@ Page {
                         }
                     }
 
-                    // 收藏按钮
+                    // 已售状态（仅在已售商品上显示）
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 12
+                        visible: ItemDetailPageHandler.isSold()
+
+                        Text {
+                            text: "Status"
+                            color: "#95a5a6"
+                            font.pixelSize: 12
+                            Layout.preferredWidth: 80
+                        }
+                        Text {
+                            text: "Sold"
+                            color: "#8a9196"
+                            font.pixelSize: 12
+                            font.bold: true
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    // 收藏按钮（已售商品不可收藏）
                     Button {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 34
-                        text: "Add to Favorites"
+                        text: ItemDetailPageHandler.isSold() ? "Sold" : "Add to Favorites"
+                        enabled: !ItemDetailPageHandler.isSold()
                         font.pixelSize: 12
                         onClicked: {
                             if (!ItemDetailPageHandler.isSignedIn()) {
