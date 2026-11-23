@@ -35,9 +35,9 @@ class BrowsePageHandler(QObject):
     @Slot(int)
     def handleLoadData(self, category_id):
         try:
+            # 同时取 available 与 sold：已售商品不隐藏，只在界面上灰化并沉到列表末尾
             query = dataManager.supabase.table('products') \
-                .select('id, seller_email, title, price, image_url, created_at') \
-                .eq('status', 'available')
+                .select('id, seller_email, title, price, image_url, created_at, status')
 
             # category_id 为 0（All）时不加筛选，否则只查该分类
             if category_id != 0:
@@ -45,6 +45,8 @@ class BrowsePageHandler(QObject):
 
             response = query.order('created_at', desc=True).execute()
             products = response.data
+            # 已售商品统一沉到列表末尾，其余仍按创建时间倒序
+            products.sort(key=lambda item: item.get('status') != 'available')
 
             # seller_email 没有外键约束，分两次查询，手动拼卖家 nickname
             emails = [p['seller_email'] for p in products]
@@ -71,7 +73,8 @@ class BrowsePageHandler(QObject):
                 title=product['title'],
                 price_text=price_text,
                 content=f"{seller}  {local_time}",
-                image_url=product['image_url'] if product['image_url'] else PLACEHOLDER_IMAGE
+                image_url=product['image_url'] if product['image_url'] else PLACEHOLDER_IMAGE,
+                status=product.get('status') or 'available'
             ))
 
         self.listModel.setData(data)

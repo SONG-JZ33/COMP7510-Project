@@ -149,13 +149,14 @@ Page {
                 required property string price_text
                 required property string content
                 required property string image_url
+                required property string status
 
                 width: ListView.view.width
                 height: 118
-                color: 'white'
+                color: status === 'sold' ? '#fafafa' : 'white'
                 radius: 10
                 border.width: 1
-                border.color: '#eceeed'
+                border.color: status === 'sold' ? '#f0f2f1' : '#eceeed'
 
                 // 商品图片（圆角裁剪）
                 Rectangle {
@@ -173,6 +174,30 @@ Page {
                         anchors.fill: parent
                         source: image_url
                         fillMode: Image.PreserveAspectCrop
+                        // 已售商品图片变淡，视觉上置灰
+                        opacity: status === 'sold' ? 0.55 : 1
+                    }
+                }
+
+                // 已售标记（右上角）
+                Rectangle {
+                    visible: status === 'sold'
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.topMargin: 10
+                    anchors.rightMargin: 10
+                    width: soldLabel.implicitWidth + 14
+                    height: 20
+                    radius: 4
+                    color: '#e8ebea'
+
+                    Text {
+                        id: soldLabel
+                        anchors.centerIn: parent
+                        text: "SOLD"
+                        color: '#8a9196'
+                        font.pixelSize: 12
+                        font.bold: true
                     }
                 }
 
@@ -184,7 +209,8 @@ Page {
                         bottom: parent.bottom
                         leftMargin: 12
                         topMargin: 14
-                        rightMargin: 12
+                        // 已售卡片右上角有 SOLD 标记，给标题让出位置
+                        rightMargin: status === 'sold' ? 58 : 12
                         bottomMargin: 14
                     }
                     spacing: 6
@@ -192,7 +218,7 @@ Page {
                     Text {
                         Layout.fillWidth: true
                         text: title
-                        color: "#2c3e50"
+                        color: status === 'sold' ? '#a6adb3' : '#2c3e50'
                         font.pixelSize: 14
                         font.bold: true
                         elide: Text.ElideRight
@@ -204,12 +230,12 @@ Page {
                         width: priceLabel.implicitWidth + 16
                         height: priceLabel.implicitHeight + 6
                         radius: 6
-                        color: '#fdf0e3'
+                        color: status === 'sold' ? '#eeeeee' : '#fdf0e3'
                         Text {
                             id: priceLabel
                             anchors.centerIn: parent
                             text: price_text
-                            color: '#e67e22'
+                            color: status === 'sold' ? '#a6adb3' : '#e67e22'
                             font.pixelSize: 14
                             font.bold: true
                         }
@@ -220,7 +246,7 @@ Page {
                         Layout.fillHeight: true
                         verticalAlignment: Text.AlignBottom
                         text: content
-                        color: "#95a5a6"
+                        color: status === 'sold' ? '#b9bec2' : '#95a5a6'
                         font.pixelSize: 12
                         elide: Text.ElideRight
                         maximumLineCount: 1
