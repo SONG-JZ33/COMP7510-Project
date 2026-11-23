@@ -29,7 +29,6 @@ Page {
                 icon.source: "back.svg"
                 onClicked: {
                     stackView.pop()
-                    ListPageHandler.handleLoadData()
                 }
             }
 
